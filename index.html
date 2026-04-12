@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobia Paracha — Computational Political Science</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f2eb;
+    --accent: #b54a32;
+    --accent-light: #d4836e;
+    --muted: #6b6961;
+    --code-bg: #1c1e2b;
+    --code-fg: #c8d6e5;
+    --code-accent: #7ec8a0;
+    --code-comment: #636e7b;
+    --border: #d5d0c6;
+    --card: #fffdf8;
+    --warm-bg: rgba(181,74,50,0.03);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Source Sans 3', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.72;
+    font-weight: 400;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(245,242,235,0.92);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  nav .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.15rem; color: var(--ink);
+    text-decoration: none; letter-spacing: -0.02em;
+  }
+  nav .logo span { color: var(--accent); }
+  nav ul { list-style: none; display: flex; gap: 1.6rem; }
+  nav a {
+    text-decoration: none; color: var(--muted);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.76rem; letter-spacing: 0.04em;
+    text-transform: uppercase; transition: color 0.25s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  .hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 6rem 2rem 4rem;
+    max-width: 1120px; margin: 0 auto; gap: 3.5rem;
+  }
+  .hero-text { flex: 1.3; }
+  .hero-text .greeting {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+  .hero-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.2rem, 4.8vw, 3.2rem);
+    line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 1.2rem;
+  }
+  .hero-text h1 .hl { color: var(--accent); }
+  .hero-text .subtitle {
+    font-size: 1.08rem; color: var(--muted);
+    max-width: 540px; margin-bottom: 0.6rem; font-weight: 300;
+  }
+  .hero-text .defending {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem; color: var(--accent);
+    margin-bottom: 1.8rem; letter-spacing: 0.02em;
+  }
+  .hero-links { display: flex; gap: 0.9rem; flex-wrap: wrap; }
+  .hero-links a {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem; text-decoration: none;
+    padding: 0.6rem 1.4rem; border-radius: 4px;
+    transition: all 0.3s; letter-spacing: 0.02em;
+  }
+  .btn-primary { background: var(--accent); color: #fff; border: 2px solid var(--accent); }
+  .btn-primary:hover { background: #963e28; border-color: #963e28; }
+  .btn-outline { background: transparent; color: var(--ink); border: 2px solid var(--border); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-code {
+    flex: 1; background: var(--code-bg); border-radius: 10px;
+    padding: 1.5rem; font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.74rem; line-height: 1.85; color: var(--code-fg);
+    box-shadow: 0 20px 60px rgba(28,30,43,0.25);
+    position: relative; overflow: hidden;
+  }
+  .hero-code::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 34px; background: rgba(255,255,255,0.035);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .dots { display: flex; gap: 6px; position: absolute; top: 10px; left: 14px; }
+  .dots span { width: 10px; height: 10px; border-radius: 50%; display: block; }
+  .dots span:nth-child(1) { background: #ff5f57; }
+  .dots span:nth-child(2) { background: #febc2e; }
+  .dots span:nth-child(3) { background: #28c840; }
+  .hero-code pre { margin-top: 1.3rem; white-space: pre-wrap; word-break: break-word; }
+  .ck { color: #c792ea; } .cf { color: #82aaff; } .cs { color: #c3e88d; }
+  .cc { color: var(--code-comment); font-style: italic; }
+  .cv { color: #ffcb6b; } .ca { color: var(--code-accent); }
+
+  section { max-width: 1120px; margin: 0 auto; padding: 5rem 2rem; }
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.73rem; color: var(--accent);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  section h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2rem; margin-bottom: 1.6rem; letter-spacing: -0.02em;
+  }
+  .divider {
+    width: 40px; height: 3px; background: var(--accent);
+    margin-bottom: 2.4rem; border-radius: 2px;
+  }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .about-prose p { font-size: 1.02rem; color: var(--muted); font-weight: 300; margin-bottom: 1rem; }
+  .detail-block { margin-bottom: 1.6rem; }
+  .detail-block h4 {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--accent); margin-bottom: 0.4rem;
+  }
+  .detail-block p { font-size: 0.92rem; color: var(--muted); font-weight: 300; }
+  .detail-block p strong { color: var(--ink); font-weight: 500; }
+
+  .edu-list { list-style: none; position: relative; padding-left: 1.8rem; }
+  .edu-list::before {
+    content: ''; position: absolute; left: 4px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--border);
+  }
+  .edu-list li { position: relative; margin-bottom: 1.8rem; padding-left: 0.8rem; }
+  .edu-list li::before {
+    content: ''; position: absolute; left: -1.8rem; top: 8px;
+    width: 10px; height: 10px; background: var(--accent); border-radius: 50%;
+    border: 2px solid var(--paper); box-shadow: 0 0 0 2px var(--accent);
+  }
+  .edu-year { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--accent); letter-spacing: 0.04em; }
+  .edu-degree { font-family: 'DM Serif Display', serif; font-size: 1.05rem; margin: 0.15rem 0; }
+  .edu-school { font-size: 0.9rem; color: var(--muted); font-weight: 300; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.3rem; }
+  .skill-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .skill-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.06); }
+  .skill-card h3 {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.84rem;
+    margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;
+  }
+  .skill-card h3 .icon { color: var(--accent); font-size: 1rem; }
+  .skill-card p { font-size: 0.9rem; color: var(--muted); font-weight: 300; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 0.7rem; }
+  .tag {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    background: rgba(181,74,50,0.07); color: var(--accent);
+    padding: 0.18rem 0.55rem; border-radius: 3px;
+  }
+
+  .research-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.4rem; }
+  .research-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .research-card:hover { transform: translateY(-3px); box-shadow: 0 8px 28px rgba(0,0,0,0.06); }
+  .research-card-header {
+    background: var(--code-bg); padding: 0.9rem 1.3rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: var(--code-comment); display: flex;
+    justify-content: space-between; align-items: center;
+  }
+  .research-card-header .file { color: var(--code-accent); }
+  .status {
+    font-size: 0.65rem; text-transform: uppercase;
+    letter-spacing: 0.06em; padding: 0.15rem 0.5rem; border-radius: 3px;
+  }
+  .status-progress { background: rgba(126,200,160,0.15); color: #7ec8a0; }
+  .status-working { background: rgba(255,203,107,0.15); color: #ffcb6b; }
+  .research-card-body { padding: 1.3rem; }
+  .research-card-body h3 {
+    font-family: 'DM Serif Display', serif; font-size: 1.08rem;
+    margin-bottom: 0.4rem; line-height: 1.35;
+  }
+  .research-card-body p { font-size: 0.88rem; color: var(--muted); font-weight: 300; margin-bottom: 0.7rem; }
+  .research-card-body .target { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent); }
+
+  .pub-list { list-style: none; }
+  .pub-list li { padding: 1.3rem 0; border-bottom: 1px solid var(--border); }
+  .pub-list li:last-child { border-bottom: none; }
+  .pub-type {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    color: #fff; background: var(--accent);
+    padding: 0.12rem 0.5rem; border-radius: 3px;
+    display: inline-block; margin-bottom: 0.4rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .pub-type.book { background: #2e6b5e; }
+  .pub-type.policy { background: #5a6978; }
+  .pub-title { font-family: 'DM Serif Display', serif; font-size: 1.02rem; margin-bottom: 0.25rem; line-height: 1.35; }
+  .pub-meta { font-size: 0.86rem; color: var(--muted); font-weight: 300; font-style: italic; }
+
+  .teaching-list { list-style: none; }
+  .teaching-list li {
+    padding: 1.2rem 0; border-bottom: 1px solid var(--border);
+    display: grid; grid-template-columns: 120px 1fr; gap: 1rem; align-items: start;
+  }
+  .teaching-list li:last-child { border-bottom: none; }
+  .teach-year { font-family: 'IBM Plex Mono', monospace; font-size: 0.74rem; color: var(--accent); padding-top: 0.15rem; }
+  .teach-title { font-weight: 500; font-size: 0.95rem; margin-bottom: 0.2rem; }
+  .teach-role {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.68rem;
+    color: var(--accent); text-transform: uppercase;
+    letter-spacing: 0.05em; margin-bottom: 0.3rem;
+  }
+  .teach-desc { font-size: 0.88rem; color: var(--muted); font-weight: 300; }
+
+  .fellowship-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
+  .fellowship-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.2rem 1.4rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .fellowship-item .f-year {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem;
+    color: var(--accent); white-space: nowrap; padding-top: 0.1rem; min-width: 52px;
+  }
+  .fellowship-item .f-name { font-size: 0.9rem; font-weight: 400; }
+  .fellowship-item .f-org { font-size: 0.82rem; color: var(--muted); font-weight: 300; }
+
+  .conf-list { list-style: none; }
+  .conf-list li {
+    padding: 0.7rem 0; border-bottom: 1px solid rgba(213,208,198,0.5);
+    display: grid; grid-template-columns: 50px 1fr; gap: 0.8rem; font-size: 0.9rem;
+  }
+  .conf-list li:last-child { border-bottom: none; }
+  .conf-year { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; color: var(--accent); }
+  .conf-title { font-weight: 300; color: var(--muted); }
+  .conf-title strong { color: var(--ink); font-weight: 500; }
+  .conf-venue { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent-light); }
+
+  .contact-row { display: flex; flex-wrap: wrap; gap: 0.9rem; }
+  .contact-item {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem;
+    color: var(--muted); text-decoration: none;
+    padding: 0.6rem 1.2rem; border: 1px solid var(--border);
+    border-radius: 6px; transition: all 0.25s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .contact-item:hover { border-color: var(--accent); color: var(--accent); background: rgba(181,74,50,0.03); }
+
+  footer {
+    text-align: center; padding: 3rem 2rem;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem;
+    color: var(--muted); border-top: 1px solid var(--border);
+    max-width: 1120px; margin: 0 auto;
+  }
+
+  .fade-in { opacity: 0; transform: translateY(18px); animation: fadeUp 0.65s ease forwards; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  .d1 { animation-delay: 0.12s; } .d2 { animation-delay: 0.24s; }
+  .d3 { animation-delay: 0.36s; } .d4 { animation-delay: 0.48s; }
+  .warm-section { background: var(--warm-bg); border-radius: 16px; }
+
+  @media (max-width: 768px) {
+    .hero { flex-direction: column; gap: 2.5rem; padding-top: 7rem; }
+    .hero-code { width: 100%; }
+    .about-grid { grid-template-columns: 1fr; }
+    nav ul { gap: 0.9rem; }
+    nav a { font-size: 0.68rem; }
+    section { padding: 3.5rem 1.4rem; }
+    .teaching-list li { grid-template-columns: 1fr; gap: 0.2rem; }
+    .conf-list li { grid-template-columns: 1fr; gap: 0.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#" class="logo">sobia<span>.</span>paracha</a>
+  <ul>
+    <li><a href="#about">About</a></li>
+    <li><a href="#research">Research</a></li>
+    <li><a href="#skills">Methods</a></li>
+    <li><a href="#publications">Papers</a></li>
+    <li><a href="#teaching">Teaching</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-text fade-in">
+    <div class="greeting">// Political Science + Code</div>
+    <h1>Nationalism, territory<br>& <span class="hl">computational</span> text.</h1>
+    <p class="subtitle">I'm Sobia Paracha — a political scientist using NLP, topic modeling, and large language models to study how elites construct and contest nationalism in territorial disputes.</p>
+    <p class="defending">&#9654; Ph.D. Candidate, Syracuse University &middot; Defending August 2026</p>
+    <div class="hero-links">
+      <a href="#research" class="btn-primary">View research</a>
+      <a href="#contact" class="btn-outline">Get in touch</a>
+    </div>
+  </div>
+  <div class="hero-code fade-in d2">
+    <div class="dots"><span></span><span></span><span></span></div>
+    <pre>
+<span class="cc"># dissertation_pipeline.py</span>
+<span class="ck">import</span> pandas <span class="ck">as</span> pd
+<span class="ck">from</span> sklearn.decomposition <span class="ck">import</span> <span class="cf">LatentDirichletAllocation</span>
+<span class="ck">from</span> transformers <span class="ck">import</span> <span class="cf">pipeline</span>
+
+<span class="cc"># Load Pakistani press corpus</span>
+<span class="cv">corpus</span> = pd.<span class="cf">read_parquet</span>(
+    <span class="cs">"data/pk_press_kashmir.parquet"</span>
+)
+
+<span class="cc"># Sentiment on elite nationalism</span>
+<span class="cv">analyzer</span> = <span class="cf">pipeline</span>(
+    <span class="cs">"sentiment-analysis"</span>,
+    model=<span class="cs">"fine-tuned-urdu-en"</span>
+)
+
+<span class="cc"># Topic modeling across decades</span>
+<span class="cv">lda</span> = <span class="cf">LatentDirichletAllocation</span>(
+    n_components=<span class="ca">15</span>,
+    random_state=<span class="ca">42</span>
+)
+
+<span class="cf">print</span>(<span class="cs">f"Corpus: <span class="ca">{len(corpus)}</span> articles"</span>)
+<span class="cf">print</span>(<span class="cs">"Pipeline ready ✓"</span>)</pre>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-label fade-in">01 / About</div>
+  <h2 class="fade-in">About me</h2>
+  <div class="divider fade-in"></div>
+  <div class="about-grid">
+    <div class="about-prose fade-in d1">
+      <p>I'm a Ph.D. candidate in Political Science at Syracuse University specializing in international relations, comparative politics, and quantitative methods. My dissertation — <em>Entrenched or Abandoned: Nationalism and Political Contestation in Territorial Disputes</em> — uses computational text analysis to study how political elites in postcolonial states construct, deploy, and sometimes abandon nationalist discourse around disputed territories.</p>
+      <p>I'm self-taught in Python and use NLP, LLM fine-tuning, sentiment analysis, and topic modeling to analyze large corpora of press discourse. Before Syracuse, I worked as a policy researcher across security institutions in Pakistan, the UK, and the United States — including Sandia National Laboratories, the New America Foundation, and the Islamabad Policy Research Institute.</p>
+      <p>I'm a Chevening Scholar (King's College London), a member of the International Policy Scholars Consortium at Johns Hopkins SAIS, and a recipient of multiple field research grants.</p>
+    </div>
+    <div class="about-details fade-in d2">
+      <div class="detail-block">
+        <h4>Research Interests</h4>
+        <p>Computational Social Science, Nationalism, Economy &amp; Politics of Borders, Foreign Policy &amp; Domestic Politics, Strategic Dynamics of South Asia</p>
+      </div>
+      <div class="detail-block">
+        <h4>Dissertation Committee</h4>
+        <p><strong>Brian Taylor</strong> (Chair), Ryan Griffiths, Erin Hern, Naushin Husain</p>
+      </div>
+      <div class="detail-block">
+        <h4>Languages</h4>
+        <p>English, Urdu, Punjabi, Siraiki, Hindi, Farsi (beginner)</p>
+      </div>
+      <div class="detail-block">
+        <h4>Affiliation</h4>
+        <p><strong>IPSCON</strong> — Kissinger Center for Global Affairs, Johns Hopkins SAIS (Carnegie Corporation)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm-section">
+  <div class="section-label fade-in">02 / Education</div>
+  <h2 class="fade-in">Education</h2>
+  <div class="divider fade-in"></div>
+  <ul class="edu-list">
+    <li class="fade-in d1">
+      <span class="edu-year">2017 – 2026</span>
+      <div class="edu-degree">Ph.D. in Political Science</div>
+      <div class="edu-school">Syracuse University &middot; International Relations, Comparative Politics, Quantitative Methods</div>
+    </li>
+    <li class="fade-in d2">
+      <span class="edu-year">2011 – 2012</span>
+      <div class="edu-degree">Master by Research in War Studies <span style="color:var(--accent); font-family:'IBM Plex Mono',monospace; font-size:0.72rem;">(Distinction)</span></div>
+      <div class="edu-school">King's College London &middot; Chevening Scholar</div>
+    </li>
+    <li class="fade-in d3">
+      <span class="edu-year">2006 – 2008</span>
+      <div class="edu-degree">M.Sc. in Defense &amp; Strategic Studies</div>
+      <div class="edu-school">Quaid-i-Azam University, Islamabad</div>
+    </li>
+    <li class="fade-in d4">
+      <span class="edu-year">2004 – 2006</span>
+      <div class="edu-degree">B.A. in Political Science &amp; Economics</div>
+      <div class="edu-school">University of Punjab, Lahore</div>
+    </li>
+  </ul>
+</section>
+
+<section id="research">
+  <div class="section-label fade-in">03 / Current Research</div>
+  <h2 class="fade-in">Research agenda</h2>
+  <div class="divider fade-in"></div>
+  <div class="research-grid">
+    <div class="research-card fade-in d1">
+      <div class="research-card-header">
+        <span class="file">dissertation/</span>
+        <span class="status status-progress">In Progress</span>
+      </div>
+      <div class="research-card-body">
+        <h3>Fluctuating Elite Nationalism and the Kashmir Dispute</h3>
+        <p>A longitudinal computational analysis of Pakistani press discourse on Kashmir. Uses topic modeling, sentiment analysis, and NLP on a large-scale corpus of press articles.</p>
+        <span class="target">Target &#8594; Journal of Conflict Resolution &middot; Draft available</span>
+      </div>
+    </div>
+    <div class="research-card fade-in d2">
+      <div class="research-card-header">
+        <span class="file">borderlands/</span>
+        <span class="status status-progress">In Progress</span>
+      </div>
+      <div class="research-card-body">
+        <h3>Security Without Voice: Discursive Suppression in Pakistan's Borderlands</h3>
+        <p>Examines elite discursive strategies toward Pakistan's peripheral territories — how security framing silences political claims from borderland populations.</p>
+        <span class="target">Target &#8594; Nations and Nationalism</span>
+      </div>
+    </div>
+    <div class="research-card fade-in d3">
+      <div class="research-card-header">
+        <span class="file">comparative/</span>
+        <span class="status status-working">Working Paper</span>
+      </div>
+      <div class="research-card-body">
+        <h3>Contested Identity: State Formation in Post-Colonial Pakistan and Argentina</h3>
+        <p>A comparative study of how postcolonial states construct national identity through territorial claims and border contestation.</p>
+        <span class="target">Working paper</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills" class="warm-section">
+  <div class="section-label fade-in">04 / Technical Methods</div>
+  <h2 class="fade-in">Skills &amp; tools</h2>
+  <div class="divider fade-in"></div>
+  <div class="skills-grid">
+    <div class="skill-card fade-in d1">
+      <h3><span class="icon">&#9672;</span> Computational Text Analysis</h3>
+      <p>Automated content analysis (supervised &amp; unsupervised), topic modeling, sentiment analysis, and LLM fine-tuning for social science research at scale.</p>
+      <div class="tag-row">
+        <span class="tag">NLP</span><span class="tag">LLM fine-tuning</span>
+        <span class="tag">topic modeling</span><span class="tag">sentiment analysis</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in d2">
+      <h3><span class="icon">&#9672;</span> Programming</h3>
+      <p>Self-taught Python developer. Full data pipelines from corpus construction through analysis and visualization.</p>
+      <div class="tag-row">
+        <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">NumPy</span>
+        <span class="tag">R / Tidyverse</span><span class="tag">Quanteda</span><span class="tag">ggplot2</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in d3">
+      <h3><span class="icon">&#9672;</span> Econometrics</h3>
+      <p>Causal inference for observational data, TSCS / panel analysis, multi-level modeling, and discrete choice models.</p>
+      <div class="tag-row">
+        <span class="tag">Stata</span><span class="tag">SPSS</span><span class="tag">OLS</span>
+        <span class="tag">logit / probit</span><span class="tag">panel data</span>
+      </div>
+    </div>
+    <div class="skill-card fade-in d4">
+      <h3><span class="icon">&#9672;</span> Data Management</h3>
+      <p>Archival research in Pakistan, text extraction from non-digital sources, large-scale corpus construction, and digital humanities workflows.</p>
+      <div class="tag-row">
+        <span class="tag">Parquet</span><span class="tag">SQL</span>
+        <span class="tag">LaTeX</span><span class="tag">corpus construction</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="publications">
+  <div class="section-label fade-in">05 / Publications</div>
+  <h2 class="fade-in">Publications &amp; research</h2>
+  <div class="divider fade-in"></div>
+  <ul class="pub-list">
+    <li class="fade-in d1">
+      <span class="pub-type">Journal Article</span>
+      <div class="pub-title">Military Dimensions of the Indian Space Program</div>
+      <div class="pub-meta">Paracha, Sobia. 2013. Astropolitics 11(3): 156–186.</div>
+    </li>
+    <li class="fade-in d2">
+      <span class="pub-type book">Book</span>
+      <div class="pub-title">Indian Defence Budget and Conventional Modernization</div>
+      <div class="pub-meta">Paracha, Sobia. 2017. Monograph. Islamabad Policy Research Institute. ISBN: 978-969-8721-61-9.</div>
+    </li>
+    <li class="fade-in d3">
+      <span class="pub-type policy">Policy Paper</span>
+      <div class="pub-title">Strategic Export Controls: Case Study of Pakistan</div>
+      <div class="pub-meta">Paracha, Sobia. 2009. South Asian Strategic Stability Institute (SASSI).</div>
+    </li>
+    <li class="fade-in d4">
+      <span class="pub-type policy">Policy Brief</span>
+      <div class="pub-title">Strategic Brief: Kerry-Lugar Bill Uncut</div>
+      <div class="pub-meta">Khan, Maria, and Sobia Paracha. 2009. SASSI Policy Brief, London.</div>
+    </li>
+    <li class="fade-in">
+      <span class="pub-type policy">Technical Report</span>
+      <div class="pub-title">A Comparison between the Indo-US Nuclear Deal and Different IAEA Safeguards Systems</div>
+      <div class="pub-meta">Khan, Maria, and Sobia Paracha. 2008. SASSI Technical Report, London.</div>
+    </li>
+  </ul>
+</section>
+
+<section id="teaching" class="warm-section">
+  <div class="section-label fade-in">06 / Teaching</div>
+  <h2 class="fade-in">Teaching experience</h2>
+  <div class="divider fade-in"></div>
+  <ul class="teaching-list">
+    <li class="fade-in d1">
+      <div><span class="teach-year">2022–2025</span></div>
+      <div>
+        <div class="teach-role">Instructor of Record</div>
+        <div class="teach-title">PSC 124 — International Relations</div>
+        <div class="teach-desc">Designed and delivered a hybrid seminar-lecture for 30 students covering bargaining models of war, international security, political economy, IR paradigms, and colonialism.</div>
+      </div>
+    </li>
+    <li class="fade-in d2">
+      <div><span class="teach-year">Spring 2022</span></div>
+      <div>
+        <div class="teach-role">Instructor of Record</div>
+        <div class="teach-title">PSC 300 — International Organization</div>
+        <div class="teach-desc">Upper-division elective on the UN, regional bodies, international law, and institutional design for managing transborder conflicts.</div>
+      </div>
+    </li>
+    <li class="fade-in d3">
+      <div><span class="teach-year">2023–2026</span></div>
+      <div>
+        <div class="teach-role">Teaching Associate</div>
+        <div class="teach-title">Quantitative Methods for the Social Sciences</div>
+        <div class="teach-desc">Four labs per week, grading, and mentoring 25 students through individual research papers. Profs. Andrew London &amp; William Oliver.</div>
+      </div>
+    </li>
+    <li class="fade-in d4">
+      <div><span class="teach-year">2018–2021</span></div>
+      <div>
+        <div class="teach-role">Teaching Associate</div>
+        <div class="teach-title">Multiple IR &amp; Methods Courses</div>
+        <div class="teach-desc">TA for Political Analysis, Issues &amp; Actors in IR (Prof. Jim Steinberg), International Relations, Comparative Law &amp; Courts, and Ethics &amp; International Relations.</div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section>
+  <div class="section-label fade-in">07 / Grants &amp; Fellowships</div>
+  <h2 class="fade-in">Selected awards</h2>
+  <div class="divider fade-in"></div>
+  <div class="fellowship-grid">
+    <div class="fellowship-item fade-in d1">
+      <span class="f-year">2014</span>
+      <div>
+        <div class="f-name">U.S. Department of State Nuclear Safety &amp; Security Scholarship</div>
+        <div class="f-org">~$35,000</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d2">
+      <span class="f-year">2011</span>
+      <div>
+        <div class="f-name">Chevening Scholarship</div>
+        <div class="f-org">British Foreign &amp; Commonwealth Office &middot; ~£24,000</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d3">
+      <span class="f-year">2024</span>
+      <div>
+        <div class="f-name">IPSCON — International Policy Scholars Consortium</div>
+        <div class="f-org">Kissinger Center, Johns Hopkins SAIS &middot; Carnegie Corporation</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d1">
+      <span class="f-year">2024</span>
+      <div>
+        <div class="f-name">Stuart Thorson Award for ICPSR Summer School</div>
+        <div class="f-org">Syracuse University &middot; $3,000</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d2">
+      <span class="f-year">2024</span>
+      <div>
+        <div class="f-name">PARCC Grant</div>
+        <div class="f-org">Program for Advancement of Research on Conflict &amp; Collaboration &middot; $2,000</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d3">
+      <span class="f-year">2023</span>
+      <div>
+        <div class="f-name">Bharati Memorial Award for Fieldwork</div>
+        <div class="f-org">Moynihan Institute &middot; $2,200</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d1">
+      <span class="f-year">2024–25</span>
+      <div>
+        <div class="f-name">Roscoe Martin Dissertation Fund</div>
+        <div class="f-org">Syracuse University &middot; Field research in India &amp; Pakistan</div>
+      </div>
+    </div>
+    <div class="fellowship-item fade-in d2">
+      <span class="f-year">2019</span>
+      <div>
+        <div class="f-name">Andrew Berlin Family National Security Research Grant</div>
+        <div class="f-org">$3,000</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="warm-section">
+  <div class="section-label fade-in">08 / Conferences</div>
+  <h2 class="fade-in">Selected presentations</h2>
+  <div class="divider fade-in"></div>
+  <ul class="conf-list">
+    <li class="fade-in">
+      <span class="conf-year">2026</span>
+      <div>
+        <div class="conf-title"><strong>Security Without Voice</strong> — Discursive Suppression and Elite Strategy in Pakistan's Borderlands</div>
+        <div class="conf-venue">SPSA, New Orleans</div>
+      </div>
+    </li>
+    <li class="fade-in">
+      <span class="conf-year">2025</span>
+      <div>
+        <div class="conf-title"><strong>Nationalism on Demand</strong> — Divergent Elite Discourse on Pakistan's Territorial Disputes</div>
+        <div class="conf-venue">Workshop on Inclusive Nationalism, Yale University</div>
+      </div>
+    </li>
+    <li class="fade-in">
+      <span class="conf-year">2025</span>
+      <div>
+        <div class="conf-title"><strong>Security Without Voice</strong> — Discursive Suppression and Elite Strategy</div>
+        <div class="conf-venue">ASN Annual Conference, Columbia University</div>
+      </div>
+    </li>
+    <li class="fade-in">
+      <span class="conf-year">2024</span>
+      <div>
+        <div class="conf-title"><strong>Entrenched or Abandoned</strong> — Nationalism and Elite Competition in Post-Colonial Territorial Disputes</div>
+        <div class="conf-venue">ISA, San Francisco &middot; MPSA, Chicago</div>
+      </div>
+    </li>
+    <li class="fade-in">
+      <span class="conf-year">2019</span>
+      <div>
+        <div class="conf-title"><strong>Conventional Deterrence and Nuclear First Use in South Asia</strong></div>
+        <div class="conf-venue">ISA, Toronto</div>
+      </div>
+    </li>
+    <li class="fade-in">
+      <span class="conf-year">2015</span>
+      <div>
+        <div class="conf-title"><strong>Emerging Indo-Pak Sea-Based Deterrents</strong></div>
+        <div class="conf-venue">International Young Pugwash Conference, Nagasaki</div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section id="contact">
+  <div class="section-label fade-in">09 / Contact</div>
+  <h2 class="fade-in">Let's connect</h2>
+  <div class="divider fade-in"></div>
+  <p style="color:var(--muted); font-weight:300; margin-bottom:1.5rem; max-width:540px;">
+    I'm open to research collaborations, postdoctoral opportunities, and conversations about computational approaches to political science.
+  </p>
+  <div class="contact-row fade-in d1">
+    <a href="mailto:ssparach@syr.edu" class="contact-item">&#9993; &nbsp;ssparach@syr.edu</a>
+    <a href="#" class="contact-item">&#9744; &nbsp;GitHub</a>
+    <a href="#" class="contact-item">&#9632; &nbsp;Google Scholar</a>
+    <a href="#" class="contact-item">in &nbsp;LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Sobia Paracha &middot; Syracuse University</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => {
+    if (!el.closest('.hero')) {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    }
+  });
+</script>
+
+</body>
+</html>
